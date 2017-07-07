@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.cadastro.model.Colaborador;
+import com.cadastro.service.ColaboradorService;
+
 @Controller
 @RequestMapping("/")
 public class ApplicationController {
@@ -29,7 +32,7 @@ public class ApplicationController {
 	public String listAll(ModelMap model){
 		List<Colaborador> colaboradores = service.findAllColaboradores();
 		model.addAttribute("colaboradores", colaboradores);
-		return "allColaboradores";
+		return "colaboradores";
 	}
 	
 	@RequestMapping(value={"/new"}, method = RequestMethod.GET)
@@ -49,7 +52,7 @@ public class ApplicationController {
 		}
 		
 		if(!service.isColaboradorSsnUnique(colaborador.getId(), colaborador.getSsn())){
-			FieldError ssnError = new FieldError("colaborador", ssn, messageSource.getMessage("non.unique.ssn", new String[]{colaborador.getSsn()}, Locale.getDefault()));
+			FieldError ssnError = new FieldError("colaborador", "ssn", messageSource.getMessage("non.unique.ssn", new String[]{colaborador.getSsn()}, Locale.getDefault()));
 			result.addError(ssnError);
 			
 			return "registration";
@@ -57,7 +60,7 @@ public class ApplicationController {
 		
 		service.saveColaborador(colaborador);
 		
-		model.addAttribute("success", "Colaborador " + colaborador.getName() + "registered successfully.")
+		model.addAttribute("success", "Colaborador " + colaborador.getName() + "registered successfully.");
 		
 		return "success";
 	}
